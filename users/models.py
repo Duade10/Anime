@@ -22,15 +22,21 @@ class User(AbstractUser):
         (LOGIN_GMAIL, "gmail"),
         (LOGIN_GITHUB, "Github"),
     )
+    ABOVE_18 = "all"
+    BELOW_18 = "child"
+
+    AGE_GROUP_CHOICES = (
+        (ABOVE_18, "18 AND ABOVE"),
+        (BELOW_18, "17 AND BELOW"),
+    )
 
     class Types(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
         NORMAL = "NORMAL", "Normal"
 
     type = models.CharField(max_length=50, choices=Types.choices, default=Types.NORMAL)
-    phone_number = models.CharField(max_length=20, null=True)
     login_method = models.CharField(max_length=20, choices=LOGIN_CHOICES, null=True, blank=True)
-    age = models.DateField()
+    age_group = models.CharField(max_length=20, choices=AGE_GROUP_CHOICES, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.first_name = str.capitalize(self.first_name)

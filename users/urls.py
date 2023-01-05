@@ -20,6 +20,4 @@ urlpatterns = [
         views.validate_reset_password,
         name="validate_reset_password",
     ),
-    path("dashboard/<int:user_id>/", views.user_profile, name="user_profille"),
-    path("dashboard/order-history/<int:user_id>/", views.user_order_history, name="order_history"),
 ]

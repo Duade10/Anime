@@ -7,6 +7,7 @@ name = "pypi"
 django = "==4.1.5"
 djangorestframework = "*"
 requests = "*"
+pillow = "*"
 
 [dev-packages]
 black = "*"

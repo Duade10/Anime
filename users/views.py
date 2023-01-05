@@ -6,7 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_decode
-from django.views.generic import DetailView, FormView, UpdateView
+from django.views.generic import DetailView, FormView, UpdateView, View
 
 from . import forms, mixins, models
 
@@ -25,7 +25,6 @@ class LoginView(mixins.LoggedOutOnlyView, FormView):
             if user.login_method != models.User.LOGIN_EMAIL and user.login_method != None:
                 messages.error(self.request, f"Invalid Login Method. Login with {user.login_method} instead.")
                 return redirect("users:login")
-            user.get_cart(self.request)
             user.login_method = models.User.LOGIN_EMAIL
             user.save()
             login(self.request, user)
@@ -47,7 +46,7 @@ def log_out(request):
 
 class SignUpView(mixins.LoggedOutOnlyView, FormView):
 
-    template_name = "users/signup.html"
+    template_name = "users/register.html"
     form_class = forms.SignUpForm
 
     def form_valid(self, form):
@@ -64,7 +63,7 @@ class SignUpView(mixins.LoggedOutOnlyView, FormView):
         return redirect("/accounts/login/?command=verification&email=" + email)
 
 
-class UserUpdateView(mixins.CorrectUserOnlyView, UpdateView):
+class UserUpdateView(UpdateView):
     model = models.User
     template_name = "users/edit_user.html"
     form_class = forms.UpdateForm
@@ -72,6 +71,11 @@ class UserUpdateView(mixins.CorrectUserOnlyView, UpdateView):
     def form_valid(self, form):
         data = form.save()
         return redirect("users:user_profille", data.pk)
+
+
+class UserDetailView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "users/user_detail.html")
 
 
 def activate(request, uidb64, token):

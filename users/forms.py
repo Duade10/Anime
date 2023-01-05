@@ -29,12 +29,13 @@ class LoginForm(forms.Form):
 class SignUpForm(forms.ModelForm):
     class Meta:
         model = models.User
-        fields = ("first_name", "last_name", "email", "password")
+        fields = ("first_name", "last_name", "email", "password", "age_group")
         widgets = {
             "first_name": forms.TextInput(attrs={"placeholder": "First Name"}),
             "last_name": forms.TextInput(attrs={"placeholder": "Last Name"}),
             "email": forms.EmailInput(attrs={"placeholder": "Email"}),
-            "password": forms.PasswordInput(attrs={"placeholder": "Password", "class": "pwstrength"}),
+            "password": forms.PasswordInput(attrs={"placeholder": "Password"}),
+            "age_group": forms.Select(attrs={"placeholder": "Age"}),
         }
 
     password1 = forms.CharField(
@@ -46,7 +47,6 @@ class SignUpForm(forms.ModelForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs["class"] = "form-control"
-            self.fields["password"].widget.attrs["class"] = "form-control pwstrength"
             self.fields
 
     def clean_email(self):

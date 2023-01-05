@@ -13,9 +13,9 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_superuser",
         "login_method",
+        "type",
+        "age_group",
     )
-    # list_filter = ("superhost", "language", "currency")
-
-    fieldsets = UserAdmin.fieldsets + (("Custom User Fields", {"fields": ("login_method",)}),)
-
+    list_filter = ("type", "age_group", "login_method")
+    fieldsets = UserAdmin.fieldsets + (("Custom User Fields", {"fields": ("login_method", "type", "age_group")}),)
     search_fields = ("username__icontains", "first_name")
