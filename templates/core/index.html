@@ -193,9 +193,13 @@
                                     <div class="product__item__text">
                                         <ul>
                                             <li>Active</li>
-                                            <li>{{movie.category}}</li>
+                                            {% for category in movie.category.all %}
+                                            {% if forloop.first %}
+                                            <li>{{category.name}}</li>
+                                            {% endif %}
+                                            {% endfor %}
                                         </ul>
-                                        <h5><a href="#">{{movie.title}}</a></h5>
+                                        <h5><a href="{{movie.get_absolute_url}}">{{movie.title}}</a></h5>
                                     </div>
                                 </div>
                             </div>
@@ -229,9 +233,13 @@
                                     <div class="product__item__text">
                                         <ul>
                                             <li>Active</li>
-                                            <li>{{movie.category}}</li>
+                                            {% for category in movie.category.all %}
+                                            {% if forloop.first %}
+                                            <li>{{category.name}}</li>
+                                            {% endif %}
+                                            {% endfor %}
                                         </ul>
-                                        <h5><a href="#">{{movie.title}}</a></h5>
+                                        <h5><a href="{{movie.get_absolute_url}}">{{movie.title}}</a></h5>
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +376,7 @@
                                 <div class="product__sidebar__view__item set-bg mix day years" data-setbg="{{movie.banner.url}}">
                                 <div class="ep">18 / ?</div>
                                 <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">{{movie.title}}</a></h5>
+                                <h5><a href="{{movie.get_absolute_url}}">{{movie.title}}</a></h5>
                                 {% endfor %}
                             </div>    
                         </div>
