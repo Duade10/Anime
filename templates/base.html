@@ -24,9 +24,14 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    {% block css %}
+    {% endblock css %}
 </head>
 <body>
 {% include 'partials/_header.html' %}
+<div class="container">
+{% include 'partials/_alert.html' %}
+</div>
 {% block content %}
 {% endblock content %}
 {% include 'partials/_footer.html' %}
@@ -41,7 +46,11 @@
 <script src="{% static 'js/jquery.slicknav.js' %}"></script>
 <script src="{% static 'js/owl.carousel.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
-
+<script type="text/javascript">
+    setTimeout(function() {
+        $('.alert').fadeOut('slow')
+    }, 3000)
+</script>
 
 </body>
 

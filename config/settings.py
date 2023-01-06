@@ -50,6 +50,7 @@ CUSTOM_APPS = [
     "core.apps.CoreConfig",
     "movies.apps.MoviesConfig",
     "categories.apps.CategoriesConfig",
+    "reviews.apps.ReviewsConfig",
 ]
 
 

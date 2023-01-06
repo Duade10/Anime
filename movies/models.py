@@ -3,6 +3,8 @@ from django.urls import reverse
 from core.models import AbstractTimeStampModel
 from users import models as users_models
 from django.utils.text import slugify
+from reviews.models import Review
+from django.db.models.aggregates import Avg, Count
 
 
 class Movie(AbstractTimeStampModel):
@@ -23,6 +25,20 @@ class Movie(AbstractTimeStampModel):
 
     def __str__(self):
         return self.title
+
+    def averageRating(self):
+        reviews = Review.objects.filter(movie=self, status=True).aggregate(average=Avg("rating"))
+        avg = 0
+        if reviews["average"] is not None:
+            avg = float(reviews["average"])
+        return avg
+
+    def countReview(self):
+        reviews = Review.objects.filter(movie=self, status=True).aggregate(count=Count("review"))
+        count = 0
+        if reviews["count"] is not None:
+            count = int(reviews["count"])
+        return count
 
     def get_absolute_url(self):
         return reverse("movies:detail", kwargs={"slug": self.slug})
