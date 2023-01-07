@@ -17,5 +17,8 @@ class CustomUserAdmin(UserAdmin):
         "age_group",
     )
     list_filter = ("type", "age_group", "login_method")
-    fieldsets = UserAdmin.fieldsets + (("Custom User Fields", {"fields": ("login_method", "type", "age_group")}),)
+    filter_horizontal = ("watchlist",)
+    fieldsets = UserAdmin.fieldsets + (
+        ("Custom User Fields", {"fields": ("login_method", "type", "age_group", "watchlist")}),
+    )
     search_fields = ("username__icontains", "first_name")

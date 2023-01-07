@@ -37,6 +37,7 @@ class User(AbstractUser):
     type = models.CharField(max_length=50, choices=Types.choices, default=Types.NORMAL)
     login_method = models.CharField(max_length=20, choices=LOGIN_CHOICES, null=True, blank=True)
     age_group = models.CharField(max_length=20, choices=AGE_GROUP_CHOICES, null=True, blank=True)
+    watchlist = models.ManyToManyField("movies.Movie", related_name="user_watchlist")
 
     def save(self, *args, **kwargs):
         self.first_name = str.capitalize(self.first_name)

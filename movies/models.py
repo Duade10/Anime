@@ -5,12 +5,13 @@ from users import models as users_models
 from django.utils.text import slugify
 from reviews.models import Review
 from django.db.models.aggregates import Avg, Count
+from django.utils import timezone
 
 
 class Movie(AbstractTimeStampModel):
     class Types(models.TextChoices):
-        MOVIE = "MOVIE", "movie"
-        SERIES = "SERIES", "series"
+        MOVIE = "movie", "Movie"
+        SERIES = "series", "Series"
 
     title = models.CharField(max_length=255)
     slug = models.SlugField(null=True, blank=True)
@@ -40,6 +41,9 @@ class Movie(AbstractTimeStampModel):
             count = int(reviews["count"])
         return count
 
+    def is_active(self):
+        return timezone.now().date() > self.date_aired
+
     def get_absolute_url(self):
         return reverse("movies:detail", kwargs={"slug": self.slug})
 
@@ -48,6 +52,7 @@ class Movie(AbstractTimeStampModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        self.rating = self.averageRating()
         return super().save(*args, **kwargs)  # Call the real save() method
 
 

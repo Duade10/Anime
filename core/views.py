@@ -6,11 +6,13 @@ from django.views import View
 class Index(View):
     def get(self, request, *args, **kwargs):
         movies = movies_models.Movie.objects.all()
-        recently_added_movies = movies.order_by("-created")
-        popular_movies = movies.order_by("-rating")
+        recently_added_movies = movies.order_by("-created")[:6]
+        popular_movies = movies.order_by("-rating")[:6]
+        watchlist_movies = request.user.watchlist.all()[:6]
         context = {
             "recently_added_movies": recently_added_movies,
             "popular_movies": popular_movies,
+            "watchlist_movies": watchlist_movies,
             "movies": movies,
         }
         return render(request, "core/index.html", context)

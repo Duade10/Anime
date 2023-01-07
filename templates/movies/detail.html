@@ -1,52 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-<style>
-    .rate>input {
-        display: none;
-    }
-    
-    .rate {
-        display: inline-block;
-    }
-    
-    .rate>label {
-        float: right;
-    }
-    
-    .rate>label::before {
-        display: inline-block;
-        font-size: 1.1rem;
-        font-family: FontAwesome;
-        content: "\f005";
-        margin: 0;
-        padding: 0.1rem 0.2rem;
-        cursor: pointer;
-    }
-    
-    .rate .half::before {
-        content: "\f089";
-        position: absolute;
-        padding-right: 0;
-    }
-    
-    input:checked~label,
-    label:hover~label {
-        color: #ffb503;
-    }
-    
-    input:checked+label:hover,
-    input:checked~label:hover,
-    input:checked~label:hover~label,
-    label:hover~input:checked~label {
-        color: #cc9000;
-    }
-    
-    .rating i {
-        color: #ffb503;
-    }
-    
-</style>
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
 {% endblock css %}
 {% block content %}
 
@@ -92,11 +47,11 @@
                             </div>
                             <div class="anime__details__rating">
                                 <div class="rating">
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star-half-o"></i></a>
+                                    <i class="fa fa-star{% if movie.averageRating == 0.5 %}-half-o{% elif movie.averageRating < 1 %}-o {% endif %}"></i>
+                                    <i class="fa fa-star{% if movie.averageRating == 1.5 %}-half-o{% elif movie.averageRating < 2 %}-o {% endif %}"></i>
+                                    <i class="fa fa-star{% if movie.averageRating == 2.5 %}-half-o{% elif movie.averageRating < 3 %}-o {% endif %}"></i>
+                                    <i class="fa fa-star{% if movie.averageRating == 3.5 %}-half-o{% elif movie.averageRating < 4 %}-o {% endif %}"></i>
+                                    <i class="fa fa-star{% if movie.averageRating == 4.5 %}-half-o{% elif movie.averageRating < 5 %}-o {% endif %}"></i>
                                 </div>
                                 <span>{{movie.countReview}} Vote{{movie.countReview|pluralize}}</span>
                             </div>
@@ -106,10 +61,8 @@
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
                                             <li><span>Type:</span> {{movie.type}}</li>
-                                            <li><span>Studios:</span> Lerche</li>
                                             <li><span>Released date:</span> {{movie.date_aired}}</li>
-                                            <li><span>Scores:</span> 7.31 / 1,515</li>
-                                            <li><span>Rating:</span> 8.5 / 161 times</li>
+                                            <li><span>Rating:</span> {{movie.averageRating}} / {{movie.countReview}} time{{movie.countReview|pluralize}}</li>
                                             <li>
                                                 <span>Genre:</span>
                                                 {% for category in movie.category.all %}
@@ -125,7 +78,11 @@
                                 </div>
                             </div>
                             <div class="anime__details__btn">
-                                <a href="" class="follow-btn"><i class="fa fa-heart-o"></i> Follow</a>
+                                {% if movie in user.watchlist.all %}
+                                <a href="{% url 'movies:toggle_watchlist' movie.pk %}" class="follow-btn"><i class="fa fa-heart"></i> Remove from Watchlist</a>
+                                {% else %}
+                                <a href="{% url 'movies:toggle_watchlist' movie.pk %}" class="follow-btn"><i class="fa fa-heart-o"></i> Add to Watchlist</a>
+                                {% endif %}
                                 <a href="{{movie.get_add_to_watch_url}}" class="watch-btn"><span>Watch Now</span> <i
                                     class="fa fa-angle-right"></i></a>
                                 </div>
@@ -160,7 +117,7 @@
                         </div>
                         <div class="anime__details__form">
                             <div class="section-title">
-                                <h5>Your Comment</h5>
+                                <h5>Your Review</h5>
                             </div>
                             <form action="{% url 'reviews:submit_review' movie.pk %}" method="POST">
                                 {% csrf_token %}
@@ -183,31 +140,20 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4">
+                        {% if related_movies %}
                         <div class="anime__details__sidebar">
                             <div class="section-title">
                                 <h5>you might like...</h5>
                             </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'img/sidebar/tv-1.jpg' %}">
+                            {% for movie in related_movies %}
+                            <div class="product__sidebar__view__item set-bg" data-setbg="{{movie.banner.url}}">
                                 <div class="ep">18 / ?</div>
                                 <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Boruto: Naruto next generations</a></h5>
+                                <h5><a href="{{movie.get_absolute_url}}">{{movie.title}}</a></h5>
                             </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'img/sidebar/tv-2.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                            </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'img/sidebar/tv-3.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Sword art online alicization war of underworld</a></h5>
-                            </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'img/sidebar/tv-4.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Fate/stay night: Heaven's Feel I. presage flower</a></h5>
-                            </div>
+                           {% endfor %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

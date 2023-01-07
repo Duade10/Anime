@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock css %}
 {% block content %}
 
     <!-- Breadcrumb Begin -->
@@ -61,77 +64,53 @@
             </div>
             <div class="row">
                 <div class="col-lg-8">
-                    <div class="anime__details__review">
-                        <div class="section-title">
-                            <h5>Reviews</h5>
+                        <div class="anime__details__review">
+                            <div class="section-title">
+                                <h5>Reviews</h5>
+                            </div>
+                            {% for review in movie.reviews.all %}
+                            <div class="anime__review__item">
+                                <div class="anime__review__item__pic">
+                                    <img src="{% static 'img/anime/review-1.jpg' %}" alt="">
+                                </div>
+                                <div class="anime__review__item__text">
+                                    <h6>{{review.full_name}} - <span>{{review.created|timesince}} ago</span></h6>
+                                    <div class="rating">
+                                        <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}"></i>
+                                        <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}"></i>
+                                        <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}"></i>
+                                        <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}"></i>
+                                        <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}"></i>
+                                    </div>
+                                    <p>{{review.subject}}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-1.jpg' %}" alt="">
+                        <div class="anime__details__form">
+                            <div class="section-title">
+                                <h5>Your Review</h5>
                             </div>
-                            <div class="anime__review__item__text">
-                                <h6>Chris Curry - <span>1 Hour ago</span></h6>
-                                <p>whachikan Just noticed that someone categorized this as belonging to the genre
-                                "demons" LOL</p>
-                            </div>
-                        </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-2.jpg' %}" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Lewis Mann - <span>5 Hour ago</span></h6>
-                                <p>Finally it came out ages ago</p>
-                            </div>
-                        </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-3.jpg' %}" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Louis Tyler - <span>20 Hour ago</span></h6>
-                                <p>Where is the episode 15 ? Slow update! Tch</p>
-                            </div>
-                        </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-4.jpg' %}" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Chris Curry - <span>1 Hour ago</span></h6>
-                                <p>whachikan Just noticed that someone categorized this as belonging to the genre
-                                "demons" LOL</p>
-                            </div>
-                        </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-5.jpg' %}" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Lewis Mann - <span>5 Hour ago</span></h6>
-                                <p>Finally it came out ages ago</p>
-                            </div>
-                        </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="{% static 'img/anime/review-6.jpg' %}" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Louis Tyler - <span>20 Hour ago</span></h6>
-                                <p>Where is the episode 15 ? Slow update! Tch</p>
-                            </div>
+                            <form action="{% url 'reviews:submit_review' movie.pk %}" method="POST">
+                                {% csrf_token %}
+                                <div class="rate">
+                                    <input type="radio" name="rating" id="rating10" value="5" required><label for="rating10" title="5"></label>
+                                    <input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9" class="half" title="4.5"></label>
+                                    <input type="radio" name="rating" id="rating8" value="4" required><label for="rating8" title="4"></label>
+                                    <input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7" class="half" title="3.5"></label>
+                                    <input type="radio" name="rating" id="rating6" value="3" required><label for="rating6" title="3"></label>
+                                    <input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5" class="half" title="2.5"></label>
+                                    <input type="radio" name="rating" id="rating4" value="2" required><label for="rating4" title="2"></label>
+                                    <input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3" class="half" title="1.5"></label>
+                                    <input type="radio" name="rating" id="rating2" value="1" required><label for="rating2" title="1"></label>
+                                    <input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1" class="half" title="0.5"></label>
+                                </div>
+                                <input class="form-control mb-2" type="text" placeholder="Subject" name="subject">
+                                <textarea placeholder="Review" name="review"></textarea>
+                                <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="anime__details__form">
-                        <div class="section-title">
-                            <h5>Your Comment</h5>
-                        </div>
-                        <form action="#">
-                            <textarea placeholder="Your Comment"></textarea>
-                            <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
