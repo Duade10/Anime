@@ -14,6 +14,7 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li class="{% if request.path == '/' %}active{% endif %}"><a href="{% url 'core:index' %}">Homepage</a></li>
+                            <li class="{% if '/category/' in request.path %}active{% endif %}"><a href="{% url 'categories:list' %}">Categories</a></li>
                         </ul>
                     </nav>
                 </div>

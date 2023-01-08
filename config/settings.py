@@ -148,3 +148,9 @@ AUTH_USER_MODEL = "users.User"
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+
+
+EMAIL_HOST = "smtp.mailtrap.io"
+EMAIL_HOST_USER = "b82789ef079316"
+EMAIL_HOST_PASSWORD = "29c38a50fa60e7"
+EMAIL_PORT = "2525"

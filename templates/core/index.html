@@ -6,18 +6,28 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/black_adam_hero_banner.jpg' %}">
+                {% for movie in movies %}
+                {% if forloop.counter < 6 %}
+                <div class="hero__items set-bg" data-setbg="{{movie.banner.url}}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
-                                <div class="label">Adventure</div>
-                                <h2>Black Adam</h2>
-                                <p>Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods--and imprisoned just as quickly--...</p>
-                                <a href="#"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                {% for category in movie.category.all %}
+                                {% if forloop.first %}
+                                <div class="label">{{category.name}}</div>
+                                {% endif %}
+                                {% endfor %}
+                                <h2>{{movie.title}}</h2>
+                                <p>{{movie.description}}</p>
+                                {% if movie.is_active %}
+                                <a href="{{movie.get_add_to_watch_url}}"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+                {% endfor %}
                 
             </div>
         </div>
@@ -80,7 +90,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                                    <a href="{% url 'movies:popular' %}" class="primary-btn">View All <span class="arrow_right"></span></a>
                                 </div>
                             </div>
                         </div>
