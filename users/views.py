@@ -78,6 +78,12 @@ class UserDetailView(View):
         return render(request, "users/user_detail.html")
 
 
+class UserWatchlistView(View):
+    def get(self, request, *args, **kwargs):
+        movies = self.request.user.watchlist.all()
+        return render(request, "users/watchlist.html", {"movies": movies})
+
+
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
