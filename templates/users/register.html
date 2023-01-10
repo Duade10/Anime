@@ -25,7 +25,8 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Sign Up</h3>
-                        <form action="" method="POST">
+                        <form action="{% url 'users:sign_up' %}" method="POST">
+                            {% csrf_token %}
                             <div class="input__item">
                                 {{form.email}}
                                 <span class="icon_mail"></span>
