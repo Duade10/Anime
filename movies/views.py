@@ -11,6 +11,9 @@ class PopularMovies(ListView):
     model = models.Movie
     template_name = "movies/popular.html"
     context_object_name = "movies"
+    page_kwarg = "page"
+    paginate_by = 20
+    paginate_orphans = 3
 
     def get_queryset(self):
         qs = super().get_queryset().order_by("-rating")
@@ -21,6 +24,9 @@ class RecentlyAddedMovies(ListView):
     model = models.Movie
     template_name = "movies/recently_added.html"
     context_object_name = "movies"
+    page_kwarg = "page"
+    paginate_by = 20
+    paginate_orphans = 3
 
     def get_queryset(self):
         qs = super().get_queryset().order_by("-created")

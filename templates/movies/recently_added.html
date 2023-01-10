@@ -48,7 +48,7 @@
                                     <div class="product__item__text">
                                         <ul>
                                             <li>Active</li>
-                                            <li>{{movie.type}}</li>
+                                            <li>{{movie.type|capfirst}}</li>
                                         </ul>
                                         <h5><a href="{{movie.get_absolute_url}}">{{movie.title}}</a></h5>
                                     </div>
@@ -57,14 +57,34 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% if page_obj.has_other_pages %}
                     <div class="product__pagination">
-                        <a href="#" class="current-page">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#"><i class="fa fa-angle-double-right"></i></a>
+                        {% if page_obj.number != 1 %}
+                        <a href="?page=1"><i class="fa fa-angle-double-left"></i></a>
+                        {% endif %}
+
+                        {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}" class="current-page">{{i}}</a>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">{{page_obj.next_page_number}}</a>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        {% if page_obj.next_page_number ==  page.number %}
+                        <a href="?page={{page_obj.next_page_number}}"><i class="fa fa-angle-double-right"></i></a>
+                        {% endif %}
+                        {% else %}
+                        {% endif %}
+                        {% if page_obj.number != page_obj.paginator.num_pages %}
+                        <a href="?page={{page_obj.paginator.num_pages}}"><i class="fa fa-angle-double-right"></i></a>
+                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
